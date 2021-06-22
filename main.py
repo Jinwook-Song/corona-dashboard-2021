@@ -1,48 +1,22 @@
-import pandas as pd
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+import plotly.express as px
 
-# get daily data
-daily_df = pd.read_csv('data/daily-report.csv')
+stylesheets = [
+    'https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.css',
+    'https://fonts.googleapis.com/css2?family=Open+Sans&display=swap'
+]
 
-# total data
-totals_df = daily_df[['Confirmed','Deaths','Recovered']].sum().reset_index(name='count')
-totals_df = totals_df.rename(columns={'index':'condition'})
+app = dash.Dash(__name__, external_stylesheets=stylesheets)
 
-# data of each country
-countries_df = daily_df[['Country_Region','Confirmed','Deaths','Recovered']]
-countries_df = countries_df.groupby('Country_Region').sum().reset_index()
+app.layout = html.Div(
+    style={'minHeight':'100vh', 'backgroundColor':'#111111', 'color':'white', 'fontFamily':'Open Sans, sans-serif'},
+    children=[
+        html.Header(style={'textAlign':'center','paddingTop':'50px' } ,children=[html.H1("Corona Dashboard", style={'fontSize':'50'})])
+        ],
 
-# get time series data
-conditions = ['confirmed','deaths','recovered']
+)
 
-def make_country_df(country):
-    def make_df(condition):
-        df = pd.read_csv('data/time_confirmed.csv')
-        df = df.loc[df['Country/Region'] == country]
-        df = df.drop(columns=['Province/State','Country/Region', 'Lat','Long']).sum().reset_index(name=condition)
-        df = df.rename(columns={'index':'date'})
-        return df
-    
-    final_df = None
-    for condition in conditions:
-        condition_df = make_df(condition)
-        if final_df is None:
-            final_df = condition_df
-        else:
-            final_df = final_df.merge(condition_df)
-    return final_df
-
-def make_global_df():
-    def make_df(condition):
-        df = pd.read_csv(f'data/time_{condition}.csv')
-        df = df.drop(['Province/State','Country/Region', 'Lat','Long'], axis=1).sum().reset_index(name=condition)
-        df = df.rename(columns={'index':'date'})
-        return df
-
-    final_df = None
-    for condition in conditions:
-        condition_df = make_df(condition)
-        if final_df is None:
-            final_df = condition_df
-        else:
-            final_df = final_df.merge(condition_df)
-    return final_df
+if __name__ == '__main__':
+    app.run_server(debug=True)
