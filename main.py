@@ -31,8 +31,7 @@ bubble_map = px.scatter_geo(
         "Recovered": ":,2f",
         "Country_Region": False,
     },
-)
-bubble_map.update_layout(margin=dict(l=0, r=0, t=50, b=0))
+).update_layout(margin=dict(l=0, r=0, t=50, b=0))
 
 ## Bar
 bars_graph = px.bar(
@@ -42,8 +41,8 @@ bars_graph = px.bar(
     template="plotly_dark",
     title="Total Global Cases",
     hover_data={"count": ":,"},
-)
-bars_graph.update_layout(xaxis=dict(title="Condition"), yaxis=dict(title="Count"))
+    labels={"condition": "Condition", "count": "Count", "color": "Condition"},
+).update_traces(marker_color=["#d63031", "#a29bfe", "#0984e3"])
 
 # Display
 app.layout = html.Div(
@@ -59,15 +58,32 @@ app.layout = html.Div(
             children=[html.H1("Corona Dashboard", style={"fontSize": "50"})],
         ),
         html.Div(
+            style={
+                "display": "grid",
+                "gap": "50",
+                "gridTemplateColumns": "repeat(4,1fr)",
+            },
             children=[
-                html.Div(children=[dcc.Graph(figure=bubble_map)]),
+                html.Div(
+                    style={"grid-column": "span 3"},
+                    children=[dcc.Graph(figure=bubble_map)],
+                ),
                 html.Div(children=[make_table(countries_df)]),
-            ]
+            ],
         ),
         html.Div(
+            style={
+                "display": "grid",
+                "gap": 50,
+                "gridTemplateColumns": "repeat(4, 1fr)",
+            },
             children=[
-                html.Div(children=[dcc.Graph(figure=bars_graph)]),
-            ]
+                html.Div(
+                    children=[
+                        dcc.Graph(figure=bars_graph),
+                    ]
+                ),
+            ],
         ),
     ],
 )
