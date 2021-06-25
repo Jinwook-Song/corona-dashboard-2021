@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
-from data import countries_df, totals_df, dropdown_options, make_global_df
+from data import countries_df, totals_df, dropdown_options, make_global_df, make_country_df
 from builders import make_table
 
 stylesheets = [
@@ -85,6 +85,7 @@ app.layout = html.Div(
                     ]
                 ),
                 html.Div(
+                    style={'grid-column': 'span 3'},
                     children=[
                         dcc.Dropdown(
                             id="country",
@@ -104,7 +105,11 @@ app.layout = html.Div(
 
 @app.callback(Output("country-graph", "figure"), [Input("country", "value")])
 def update_hello(value):
-    df = make_global_df()
+    if value:
+        df = make_country_df(value)
+    else:
+        df = make_global_df()
+
     fig = px.line(
         df,
         x="date",
@@ -117,6 +122,7 @@ def update_hello(value):
     fig["data"][0]["line"]["color"] = "#d63031"
     fig["data"][1]["line"]["color"] = "#a29bfe"
     fig["data"][2]["line"]["color"] = "#0984e3"
+
     return fig
 
 
