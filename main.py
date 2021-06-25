@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
-from data import countries_df, totals_df
+from data import countries_df, totals_df, dropdown_options, make_global_df
 from builders import make_table
 
 stylesheets = [
@@ -86,8 +86,14 @@ app.layout = html.Div(
                 ),
                 html.Div(
                     children=[
-                        dcc.Input(placeholder="What is your name?", id="hello-input"),
-                        html.H2(children="Hello anonymous", id="hello-output"),
+                        dcc.Dropdown(
+                            id="country",
+                            options=[
+                                {"label": country, "value": country}
+                                for country in dropdown_options
+                            ],
+                        ),
+                        dcc.Graph(id="country-graph"),
                     ]
                 ),
             ],
@@ -96,12 +102,22 @@ app.layout = html.Div(
 )
 
 
-@app.callback(Output("hello-output", "children"), [Input("hello-input", "value")])
+@app.callback(Output("country-graph", "figure"), [Input("country", "value")])
 def update_hello(value):
-    if value is None:
-        return "Hello Anonymous"
-    else:
-        return f"Hello {value}"
+    df = make_global_df()
+    fig = px.line(
+        df,
+        x="date",
+        y=["confirmed", "deaths", "recovered"],
+        template="plotly_dark",
+        labels={"value": "Cases", "variable": "condition", "date": "Date"},
+        hover_data={"value": ":,", "variable": False, "date": False},
+    )
+    fig.update_xaxes(rangeslider_visible=True)
+    fig["data"][0]["line"]["color"] = "#d63031"
+    fig["data"][1]["line"]["color"] = "#a29bfe"
+    fig["data"][2]["line"]["color"] = "#0984e3"
+    return fig
 
 
 if __name__ == "__main__":
