@@ -5,3 +5,7 @@ Time Series: https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_1
 Checkout Corona Map: https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6
 
 ## 21/06/21 data
+
+### for heroku
+
+pip3 freeze > requirements.txt

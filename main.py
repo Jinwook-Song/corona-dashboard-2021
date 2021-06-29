@@ -20,6 +20,9 @@ stylesheets = [
 
 app = dash.Dash(__name__, external_stylesheets=stylesheets)
 
+# for heroku
+server = app.server
+
 ## Map
 bubble_map = px.scatter_geo(
     countries_df,
@@ -139,5 +142,5 @@ def update_hello(value):
     return fig
 
 
-if __name__ == "__main__":
-    app.run_server(debug=True)
+# if __name__ == "__main__":
+#     app.run_server(debug=True)
