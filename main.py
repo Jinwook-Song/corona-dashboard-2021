@@ -19,6 +19,7 @@ stylesheets = [
 ]
 
 app = dash.Dash(__name__, external_stylesheets=stylesheets)
+app.title = "Corona Dashboard"
 
 # for heroku
 server = app.server
