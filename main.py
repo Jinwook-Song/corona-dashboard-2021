@@ -1,9 +1,16 @@
+from logging import PlaceHolder
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
-from data import countries_df, totals_df, dropdown_options, make_global_df, make_country_df
+from data import (
+    countries_df,
+    totals_df,
+    dropdown_options,
+    make_global_df,
+    make_country_df,
+)
 from builders import make_table
 
 stylesheets = [
@@ -85,17 +92,23 @@ app.layout = html.Div(
                     ]
                 ),
                 html.Div(
-                    style={'grid-column': 'span 3'},
+                    style={"grid-column": "span 3"},
                     children=[
                         dcc.Dropdown(
                             id="country",
+                            style={
+                                "width": 320,
+                                "margin": "0 auto",
+                                "color": "#111111",
+                            },
+                            placeholder="Select a Country",
                             options=[
                                 {"label": country, "value": country}
                                 for country in dropdown_options
                             ],
                         ),
                         dcc.Graph(id="country-graph"),
-                    ]
+                    ],
                 ),
             ],
         ),
