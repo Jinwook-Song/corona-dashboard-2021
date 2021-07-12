@@ -1,6 +1,6 @@
 ## https://corona-dashboard-2021.herokuapp.com/
 
-## 21/06/21 data
+## 21/07/12 data
 
 Daily Report: https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_daily_reports
 
