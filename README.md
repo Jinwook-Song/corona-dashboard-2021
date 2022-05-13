@@ -11,3 +11,7 @@ Checkout Corona Map: https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.
 ### for heroku
 
 pip3 freeze > requirements.txt
+
+### requirment install
+
+pip install -r requirements.txt
